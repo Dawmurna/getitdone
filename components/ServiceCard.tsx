@@ -1,4 +1,6 @@
+import Image from "next/image";
 import Link from "next/link";
+import { serviceImage } from "@/lib/images";
 import { getCategory, getProvider, providerLabel, type Service } from "@/lib/data";
 import { naira } from "@/lib/format";
 import Avatar from "./Avatar";
@@ -6,7 +8,31 @@ import CategoryIcon from "./CategoryIcon";
 import Rating from "./Rating";
 import SaveButton from "./SaveButton";
 
-export function ServiceThumb({ categoryId, className = "" }: { categoryId: string; className?: string }) {
+export function ServiceThumb({
+  categoryId,
+  src,
+  className = "",
+  priority = false,
+}: {
+  categoryId: string;
+  src?: string;
+  className?: string;
+  priority?: boolean;
+}) {
+  if (src) {
+    return (
+      <div className={`relative overflow-hidden bg-gray-100 ${className}`}>
+        <Image
+          src={src}
+          alt=""
+          fill
+          priority={priority}
+          sizes="(max-width: 640px) 100vw, (max-width: 1280px) 33vw, 300px"
+          className="object-cover"
+        />
+      </div>
+    );
+  }
   const c = getCategory(categoryId);
   return (
     <div
@@ -27,7 +53,7 @@ export default function ServiceCard({ service }: { service: Service }) {
     <div className="card group relative overflow-hidden transition hover:-translate-y-0.5 hover:shadow-md">
       <Link href={`/providers/${provider.id}?service=${service.id}#book`} className="block">
         <div className="relative">
-          <ServiceThumb categoryId={service.categoryId} className="h-36 w-full" />
+          <ServiceThumb categoryId={service.categoryId} src={serviceImage(service.id)} className="h-36 w-full" />
           <span className="absolute bottom-0 left-0 rounded-tr-md bg-[#1F4D3F] px-2 py-0.5 text-[11px] font-semibold text-white">
             {service.mode}
           </span>

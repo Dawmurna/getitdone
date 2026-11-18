@@ -37,9 +37,11 @@ There is no database yet. Accounts, bookings, saved items and requests are store
 
 First sign in creates a few sample bookings so the dashboard looks like the design.
 
-## Swapping in real images
+## Images
 
-Cards use gradient tiles with category icons. To use photos, drop them in `public/images/` and replace the `ServiceThumb` and `Avatar` components with `next/image`.
+The photos were cut out of your Figma screenshots, so they are lower resolution than the originals (fine on normal screens, a bit soft on retina). To get full quality, export each image from Figma at 2x and overwrite the file in `public/images/` using the same file name. No code changes needed. The file-to-service mapping is in `lib/images.ts`.
+
+The "Maths & Coding Lessons" service and the "Lens by Tobi" and "Chioma Eze" profiles have no photo in the design, so they show a colored tile or initials until you add one.
 
 ## Suggested next steps
 
@@ -54,5 +56,7 @@ Cards use gradient tiles with category icons. To use photos, drop them in `publi
 app/                 pages (home, services, providers/[id], dashboard, ...)
 components/          shared UI and the dashboard client
 lib/data.ts          categories, providers, services, reviews
+lib/images.ts        which photo belongs to which service or person
+public/images/       all photos
 lib/store.tsx        client state saved to localStorage
 ```

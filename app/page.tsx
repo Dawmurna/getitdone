@@ -1,9 +1,11 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, CalendarDays, Check, ChevronDown, MapPin, MessageCircle, Search, Users } from "lucide-react";
 import CategoryGrid from "@/components/CategoryGrid";
 import ProviderCard from "@/components/ProviderCard";
 import ServiceCard from "@/components/ServiceCard";
 import { locations, providers, services } from "@/lib/data";
+import { ctaImage, heroImage } from "@/lib/images";
 
 const popular = ["Plumber", "Event planner", "Tailor", "Fitness coach", "Business consultant", "Photographer"];
 
@@ -24,9 +26,10 @@ export default function HomePage() {
   return (
     <>
       {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-[#241810] via-[#3a2916] to-[#6b4423] text-white">
-        <div className="pointer-events-none absolute -right-24 -top-24 h-96 w-96 rounded-full bg-brand/25 blur-3xl" />
-        <div className="pointer-events-none absolute -bottom-32 right-40 h-80 w-80 rounded-full bg-amber-400/10 blur-3xl" />
+      <section className="relative overflow-hidden bg-[#241810] text-white">
+        <Image src={heroImage} alt="" fill priority sizes="100vw" className="object-cover object-right" />
+        <div className="absolute inset-0 bg-[#1c120a]/55 md:bg-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#1c120a]/95 via-[#1c120a]/70 via-40% to-transparent" />
         <div className="container-page relative py-16 sm:py-20 lg:py-24">
           <p className="text-lg text-white/90">Find the right people to help you</p>
           <h1 className="mt-2 text-5xl font-extrabold leading-[1.05] tracking-tight sm:text-6xl">
@@ -127,8 +130,11 @@ export default function HomePage() {
 
       {/* Provider CTA */}
       <section className="container-page pt-12">
-        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#2a1b10] via-[#4a2f18] to-[#6b4423] px-6 py-10 text-white sm:px-10">
-          <div className="pointer-events-none absolute -right-10 -top-10 h-56 w-56 rounded-full bg-brand/30 blur-3xl" />
+        <div className="relative overflow-hidden rounded-2xl bg-[#2a1b10] px-6 py-10 text-white sm:px-10">
+          <div className="absolute inset-y-0 right-0 hidden w-full md:left-[26%] md:right-[20%] md:block md:w-auto">
+            <Image src={ctaImage} alt="" fill sizes="(max-width: 1280px) 55vw, 700px" className="object-cover object-top" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#2a1b10] via-transparent to-[#2a1b10]" />
+          </div>
           <div className="relative grid gap-8 md:grid-cols-[1fr_auto] md:items-center">
             <div>
               <h2 className="text-2xl font-bold">Ready to share your skills?</h2>

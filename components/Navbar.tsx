@@ -70,7 +70,7 @@ export default function Navbar() {
               </Link>
               <div className="relative hidden md:block">
                 <button onClick={() => setMenu((m) => !m)} className="flex items-center gap-1.5" aria-haspopup="menu" aria-expanded={menu}>
-                  <Avatar name={user?.name ?? "User"} size={40} />
+                  <Avatar name={user?.name ?? "User"} size={40} photo={false} />
                   <ChevronDown className="h-4 w-4" />
                 </button>
                 {menu && (

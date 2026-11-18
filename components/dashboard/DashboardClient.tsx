@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
@@ -34,6 +35,7 @@ import {
   services,
 } from "@/lib/data";
 import { daysUntil, formatDate, naira } from "@/lib/format";
+import { ctaImage, serviceImage } from "@/lib/images";
 import { useApp, type Booking, type BookingStatus } from "@/lib/store";
 
 type TabId = "dashboard" | "bookings" | "messages" | "saved-providers" | "saved-services" | "payments" | "reviews" | "requests";
@@ -150,7 +152,7 @@ function Greeting() {
   const first = user?.name.split(" ")[0] ?? "";
   return (
     <div className="flex items-center gap-5">
-      <Avatar name={user?.name ?? "User"} size={80} />
+      <Avatar name={user?.name ?? "User"} size={80} photo={false} />
       <div>
         <h1 className="text-2xl font-bold text-ink">{word}, {first}</h1>
         <p className="mt-1 text-sm text-muted">Here&apos;s what&apos;s happening with your services and bookings.</p>
@@ -183,7 +185,7 @@ function Overview() {
               <span className={`grid h-10 w-10 place-items-center rounded-lg ${s.tint}`}><s.icon className="h-5 w-5" /></span>
               <p className="mt-4 text-2xl font-bold text-ink">{s.value}</p>
               <p className="text-xs text-muted">{s.label}</p>
-              <Link href={s.href} className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-[#2F5BB7]">
+              <Link href={s.href} className="mt-3 inline-flex items-center gap-1 whitespace-nowrap text-xs font-medium text-[#2F5BB7]">
                 {s.cta} <ArrowRight className="h-3 w-3" />
               </Link>
             </div>
@@ -206,7 +208,7 @@ function Overview() {
             <h2 className="text-base font-semibold">Recommended for you</h2>
             <Link href="/services" className="inline-flex items-center gap-1 text-xs font-medium text-[#2F5BB7]">View all <ArrowRight className="h-3 w-3" /></Link>
           </div>
-          <div className="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          <div className="mt-4 grid gap-4 sm:grid-cols-2">
             {recommended.map((s) => <ServiceCard key={s.id} service={s} />)}
           </div>
         </section>
@@ -264,10 +266,11 @@ function Overview() {
           </div>
         </section>
 
-        <section className="relative overflow-hidden rounded-xl bg-gradient-to-br from-[#2a1b10] to-[#6b4423] p-6 text-white">
-          <div className="pointer-events-none absolute -right-8 -top-8 h-32 w-32 rounded-full bg-brand/40 blur-2xl" />
+        <section className="relative overflow-hidden rounded-xl bg-[#2a1b10] p-6 text-white">
+          <Image src={ctaImage} alt="" fill sizes="340px" className="object-cover object-right" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#2a1b10] via-[#2a1b10]/70 to-transparent" />
           <h2 className="relative text-lg font-bold leading-snug">Turn your skills<br />into income</h2>
-          <p className="relative mt-2 text-xs text-white/85">Join thousands of people already offering their services on GetItDone.</p>
+          <p className="relative mt-2 max-w-[190px] text-xs text-white/85">Join thousands of people already offering their services on GetItDone.</p>
           <Link href="/become-a-provider" className="btn-primary relative mt-4">Become a provider <ArrowRight className="h-4 w-4" /></Link>
         </section>
       </div>
@@ -281,7 +284,7 @@ function NextAppointment({ booking }: { booking: Booking }) {
   const label = days === null ? "" : days <= 0 ? "Today" : days === 1 ? "1 day to go" : `${days} days to go`;
   return (
     <div className="mt-4 flex gap-4">
-      <ServiceThumb categoryId={booking.categoryId} className="h-20 w-24 shrink-0 rounded-lg" />
+      <ServiceThumb categoryId={booking.categoryId} src={serviceImage(booking.serviceId)} className="h-20 w-24 shrink-0 rounded-lg" />
       <div className="min-w-0 text-xs text-muted">
         <p className="text-sm font-semibold text-ink">{booking.serviceTitle}</p>
         <p className="mt-1">{booking.providerName}</p>
@@ -300,7 +303,7 @@ function BookingRow({ booking }: { booking: Booking }) {
   return (
     <div className="rounded-xl border border-line p-3">
       <div className="flex gap-4">
-        <ServiceThumb categoryId={booking.categoryId} className="h-[88px] w-24 shrink-0 rounded-lg sm:w-24" />
+        <ServiceThumb categoryId={booking.categoryId} src={serviceImage(booking.serviceId)} className="h-[88px] w-24 shrink-0 rounded-lg sm:w-24" />
         <div className="min-w-0 flex-1">
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0">

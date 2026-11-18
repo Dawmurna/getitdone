@@ -1,6 +1,7 @@
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { BadgeCheck, ChevronRight, Clock, MapPin, MessageCircle, Send, ShieldCheck, Check } from "lucide-react";
+import { BadgeCheck, ChevronRight, Star, Clock, MapPin, MessageCircle, Send, ShieldCheck, Check } from "lucide-react";
 import Avatar from "@/components/Avatar";
 import BookingForm from "@/components/BookingForm";
 import ReadMore from "@/components/ReadMore";
@@ -16,6 +17,7 @@ import {
   servicesByProvider,
 } from "@/lib/data";
 import { naira } from "@/lib/format";
+import { galleryFor, portfolios, serviceImage } from "@/lib/images";
 
 export function generateStaticParams() {
   return providers.map((p) => ({ id: p.id }));
@@ -44,6 +46,8 @@ export default async function ProviderPage({
   const reviews = reviewsFor(provider.id);
   const serviceParam = Array.isArray(sp.service) ? sp.service[0] : sp.service;
   const label = providerLabel(provider);
+  const gallery = galleryFor(provider.id, list.map((x) => x.id));
+  const portfolio = portfolios[provider.id] ?? [];
 
   return (
     <div className="container-page py-6">
@@ -81,7 +85,7 @@ export default async function ProviderPage({
               </div>
               <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm">
                 <span className="inline-flex items-center gap-1.5">
-                  <StarRow rating={1} size={16} />
+                  <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
                   <strong>{provider.rating.toFixed(1)}</strong>
                   <span className="text-muted">({provider.reviews} reviews)</span>
                 </span>
@@ -101,9 +105,9 @@ export default async function ProviderPage({
 
           {/* Gallery */}
           <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
-            <ServiceThumb categoryId={provider.categoryId} className="col-span-2 row-span-2 aspect-[4/3] rounded-xl sm:aspect-auto sm:min-h-[260px]" />
-            {[0, 1, 2, 3].map((i) => (
-              <ServiceThumb key={i} categoryId={provider.categoryId} className="aspect-[4/3] rounded-xl opacity-90" />
+            <ServiceThumb categoryId={provider.categoryId} src={gallery[0]} priority className="col-span-2 row-span-2 aspect-[4/3] rounded-xl sm:aspect-auto sm:min-h-[260px]" />
+            {[1, 2, 3, 4].map((i) => (
+              <ServiceThumb key={i} categoryId={provider.categoryId} src={gallery[i]} className="aspect-[4/3] rounded-xl" />
             ))}
           </div>
 
@@ -117,7 +121,7 @@ export default async function ProviderPage({
                 scroll
                 className="card group overflow-hidden transition hover:-translate-y-0.5 hover:shadow-md"
               >
-                <ServiceThumb categoryId={s.categoryId} className="h-32 w-full" />
+                <ServiceThumb categoryId={s.categoryId} src={serviceImage(s.id)} className="h-32 w-full" />
                 <div className="p-3.5">
                   <h3 className="line-clamp-1 text-sm font-semibold">{s.title}</h3>
                   <p className="mt-1.5 flex items-center gap-1.5 text-xs text-muted"><Clock className="h-3.5 w-3.5" /> {s.duration}</p>
@@ -129,6 +133,25 @@ export default async function ProviderPage({
               </Link>
             ))}
           </div>
+
+          {/* Portfolio */}
+          {portfolio.length > 0 && (
+            <section className="mt-10">
+              <div className="flex items-end justify-between">
+                <div>
+                  <h2 className="text-lg font-bold text-ink">Portfolio</h2>
+                  <p className="mt-1 text-xs text-muted">A few examples of our recent work</p>
+                </div>
+              </div>
+              <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-4">
+                {portfolio.map((src, i) => (
+                  <div key={src} className="relative aspect-[4/3] overflow-hidden rounded-xl bg-gray-100">
+                    <Image src={src} alt={`${label} recent work ${i + 1}`} fill sizes="(max-width: 768px) 50vw, 25vw" className="object-cover" />
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
 
           {/* Reviews */}
           <section className="card mt-10 p-5">
